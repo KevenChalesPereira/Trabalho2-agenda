@@ -23,16 +23,12 @@ namespace Trabalho2
             
         }
 
-        public void adicionar(String nome, String telefone)
-        {
-        this.nome = nome;
-        this.telefone = telefone;
-        }
+   
 
-        public void editar(Contatos c, string n_nome, string n_telefone)
+        public void editar( string n_nome, string n_telefone)
         {
-            c.nome = n_nome;
-            c.telefone = n_telefone;
+            this.nome = n_nome;
+            this.telefone = n_telefone;
         }
     }
 
