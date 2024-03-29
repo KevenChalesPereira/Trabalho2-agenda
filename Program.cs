@@ -4,7 +4,23 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Contatos c = new Contatos();
+
+            string? nom, numer;
+
+            nom = Console.ReadLine();
+            numer = Console.ReadLine();
+
+            c.adicionar(nom, numer);
+            
+            Console.Write("Antigo: " + c.nome);
+            Console.ReadLine();
+            Console.Write("Novo : ");
+            
         }
+        
+     
+       
     }
+
 }
