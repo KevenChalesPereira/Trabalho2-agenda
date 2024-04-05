@@ -6,10 +6,11 @@ namespace Trabalho2
     {
         static void Main(string[] args)
         {
-            Contatos c = new Contatos();
+            Contatos c = new Contatos("Teste","123456789");
             List<Contatos> lista_contatos = new List<Contatos>();
 
             string? nom, numer;
+
 
             //Inserir dados
             /*nom = Console.ReadLine();
@@ -18,9 +19,10 @@ namespace Trabalho2
             c.adicionar(nom, numer);
             lista_contatos.Add(c);
 
-            Console.WriteLine(c.nome + " " +  c.telefone);
+            Console.WriteLine(c.nome + " " +  c.telefone);*/
 
-            //Editar dados
+
+            /* Editar dados
             Console.WriteLine("Nome Antigo: " + c.nome);
             Console.Write("Nome Novo: ");
             nom = Console.ReadLine();
@@ -30,21 +32,51 @@ namespace Trabalho2
             numer = Console.ReadLine();
 
             c.editar(nom, numer);
-            //Fim editar dados*/
+            Fim editar dados*/
 
-            
+            /* Excluir contato
+
+          Contatos excluiu =  lista_contatos.Find(item => item.nome == "nome" && item.telefone == "tel");
+            excluiu.excluir();
+            */
+
+            /* Fazer a parte de leitura do arquivo
+            StreamReader sr = new StreamReader("agenda.txt");
+            sr.ReadLine();
+            */
+
             lista_contatos.Add(novo("Kéven","999"));
             lista_contatos.Add(novo("Link", "888"));
-           //Procurar na list
-            lista_contatos.Find();
-         
-            foreach (Contatos x in lista_contatos)
+            lista_contatos.Add(c);
+
+           /*
+            *  Criação e escrita de arquivo
+            StreamWriter sw = new StreamWriter("agenda.txt", false);
+            
+            foreach(Contatos contato in lista_contatos)
             {
-                Console.WriteLine(x.nome + " " + x.telefone);
+                sw.WriteLine(contato.nome);
+                sw.WriteLine(contato.telefone);
+                sw.WriteLine(" ");
             }
-            
-            
-            
+
+            sw.Close();
+           */
+
+          
+
+            //Procurar na list
+            /*Where retorna uma lista com os objetos encontrados, salvar em uma variavel do mesmo tipo de dados e utilizar o foreach para exibir os valores
+              string pesquisa = Console.ReadLine();
+              List<Contatos> list_encotrados =  lista_contatos.Where(item => item.nome.ToLower().Contains(pesquisa.ToLower())).ToList();
+
+               foreach (Contatos x in list_encotrados)
+               {
+                   Console.WriteLine(x.nome + " " + x.telefone);
+               }
+
+               */
+
         }
         public static Contatos novo(String nome, String numero){
             Contatos c = new Contatos(nome, numero);

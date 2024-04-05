@@ -8,8 +8,9 @@ namespace Trabalho2
 {
     internal class Contatos
     {
-        public String nome { get; set; } = "";
-        public String telefone { get; set; } = "";
+        /* objetos com valores nulos são invalidos e não vão para o arquivo*/
+        public String? nome { get; set; } 
+        public String? telefone { get; set; } 
 
 
         public Contatos()
@@ -29,6 +30,11 @@ namespace Trabalho2
         {
             this.nome = n_nome;
             this.telefone = n_telefone;
+        }
+        public void excluir()
+        {
+            this.nome = null;
+            this.telefone = null;
         }
     }
 
