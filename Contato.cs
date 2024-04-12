@@ -6,35 +6,31 @@ using System.Threading.Tasks;
 
 namespace Trabalho2
 {
-    internal class Contatos
+    internal class Contato
     {
         /* objetos com valores nulos são invalidos e não vão para o arquivo*/
         public String? nome { get; set; } 
-        public String? telefone { get; set; } 
+        public String? email { get; set; }
+        public List<String>? telefone { get; set; } 
 
 
-        public Contatos()
+        public Contato()
         {
             
         }
-        public Contatos(string nome, string telefone)
+        public Contato(string nome, string email, List<string> telefone)
         {
             this.nome = nome;
+            this.email = email;
             this.telefone = telefone;
             
         }
 
-   
-
-        public void editar( string n_nome, string n_telefone)
-        {
-            this.nome = n_nome;
-            this.telefone = n_telefone;
-        }
         public void excluir()
         {
             this.nome = null;
             this.telefone = null;
+            this.email = null;
         }
     }
 

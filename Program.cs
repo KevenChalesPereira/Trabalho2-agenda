@@ -4,67 +4,74 @@ namespace Trabalho2
 {
     internal class Program
     {
+        const char separador = (char)160;
         static void Main(string[] args)
         {
-            Contatos c = new Contatos("Teste","123456789");
-            List<Contatos> lista_contatos = new List<Contatos>();
+            List<Contato> lista_contatos = new List<Contato>();
 
-            string? nom, numer;
+            
+            Contato c = new Contato();
 
+            List<string> lista_numeros = new List<string>();
 
-            //Inserir dados
-            /*nom = Console.ReadLine();
-            numer = Console.ReadLine();
+            if (!File.Exists("agenda.txt"))
+                File.Create("agenda.txt");
 
-            c.adicionar(nom, numer);
+            lista_numeros.Add("123");
+            lista_numeros.Add("456");
+            lista_numeros.Add("789");
+
+            c.nome = "Kéven";
+            c.email = "Teste";
+            c.telefone = lista_numeros;
             lista_contatos.Add(c);
-
-            Console.WriteLine(c.nome + " " +  c.telefone);*/
-
-
-            /* Editar dados
-            Console.WriteLine("Nome Antigo: " + c.nome);
-            Console.Write("Nome Novo: ");
-            nom = Console.ReadLine();
-
-            Console.WriteLine("\nTelefone Antigo: " + c.telefone);
-            Console.Write("Telefone Novo: ");
-            numer = Console.ReadLine();
-
-            c.editar(nom, numer);
-            Fim editar dados*/
-
             /* Excluir contato
 
           Contatos excluiu =  lista_contatos.Find(item => item.nome == "nome" && item.telefone == "tel");
             excluiu.excluir();
             */
 
-            /* Fazer a parte de leitura do arquivo
-            StreamReader sr = new StreamReader("agenda.txt");
-            sr.ReadLine();
-            */
+            // Criação e escrita de arquivo 
+             StreamWriter sw = new StreamWriter("agenda.txt", true);
 
-            lista_contatos.Add(novo("Kéven","999"));
-            lista_contatos.Add(novo("Link", "888"));
-            lista_contatos.Add(c);
-
-           /*
-            *  Criação e escrita de arquivo
-            StreamWriter sw = new StreamWriter("agenda.txt", false);
+             foreach(Contato contato in lista_contatos)
+             {
+                 sw.Write(contato.nome + separador + contato.email + separador);
+                 
+                foreach(string telefone in contato.telefone)
+                {
+                    sw.Write(telefone + separador);
+                }
+                sw.WriteLine();
+             }
+            sw.Close();
             
-            foreach(Contatos contato in lista_contatos)
-            {
-                sw.WriteLine(contato.nome);
-                sw.WriteLine(contato.telefone);
-                sw.WriteLine(" ");
+
+            // StreamReader sr = new StreamReader("agenta.txt");
+
+            List<String> lista = new List<String>();
+            List<String> lista2= new List<String>();
+
+            
+
+            lista = File.ReadAllLines("agenda.txt").ToList();
+
+            
+            foreach(String linha  in lista) {
+
+                lista2 = linha.Split(separador).ToList();
+                lista_contatos.Add(upar_lista(lista2));
+
             }
 
-            sw.Close();
-           */
+            foreach(Contato linha in lista_contatos) {
+                Console.WriteLine(linha.nome + " " + linha.email);
 
-          
-
+                foreach(string tel in linha.telefone)
+                {
+                    Console.WriteLine(tel + "");
+                }
+           }
             //Procurar na list
             /*Where retorna uma lista com os objetos encontrados, salvar em uma variavel do mesmo tipo de dados e utilizar o foreach para exibir os valores
               string pesquisa = Console.ReadLine();
@@ -78,9 +85,20 @@ namespace Trabalho2
                */
 
         }
-        public static Contatos novo(String nome, String numero){
-            Contatos c = new Contatos(nome, numero);
-            return c;
+        public static Contato upar_lista(List<string> lista)
+        {
+            int qtd_lista = lista.Count();
+            string nome = lista[0];
+            string email = lista[1];
+            List<string> numeros = new List<string>();
+
+            for(int i = 2; i < qtd_lista; i++)
+            {
+                numeros.Add(lista[i]);
+            }
+            Contato contato = new Contato(nome,email,numeros);
+            
+            return contato;
         }
        
        
