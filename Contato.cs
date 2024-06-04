@@ -31,6 +31,8 @@ namespace Trabalho2
             this.nome = null;
             this.telefone = null;
             this.email = null;
+            Console.Clear();
+            Console.WriteLine("Contato excluido com sucesso!");
         }
     }
 
