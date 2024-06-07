@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Trabalho2.Contato">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAIAgAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contato.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Trabalho2.Program">
+    <Position X="3" Y="0.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAQAgAAAAAABAAABAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

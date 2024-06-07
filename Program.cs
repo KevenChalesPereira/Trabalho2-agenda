@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Net.Mail;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Trabalho2
 {
@@ -8,9 +9,9 @@ namespace Trabalho2
         static void Main(string[] args)
         {
             List<Contato> lista_contatos = new List<Contato>();
-            List<String> lista = new List<String>();
-            List<String> lista2 = new List<String>();
-            List<string> lista_numeros = new List<string>();
+            List<String> lista_temp1 = new List<String>();
+            List<String> lista_temp2 = new List<String>();
+            List<String> lista_numeros = new List<String>();
 
             
 
@@ -18,14 +19,12 @@ namespace Trabalho2
             //ler o arquivo de texto da agenda
             if (!File.Exists("agenda.txt"))
                 File.Create("agenda.txt");
-            lista = File.ReadAllLines("agenda.txt").ToList();
-
-
-            foreach (String linha in lista)
+            lista_temp1 = File.ReadAllLines("agenda.txt").ToList();
+            foreach (String linha in lista_temp1)
             {
-
-                lista2 = linha.Split(separador).ToList();
-                lista_contatos.Add(baixar_lista(lista2));
+                //Colocar os dados do arquivo no vetor de contatos
+                lista_temp2 = linha.Split(separador).ToList();//separando as informações
+                lista_contatos.Add(baixar_lista(lista_temp2));
 
             }
 
@@ -35,13 +34,14 @@ namespace Trabalho2
             {
             menu:
                 
-                Console.WriteLine("|---MENU---|");
-                Console.WriteLine("Add novo(1)");
-                Console.WriteLine("Editar num(2)");
-                Console.WriteLine("Ecluir con(3)");
-                Console.WriteLine("Ver contatos(4)");
-                Console.WriteLine("Sair(0)");
-                Console.Write("O que deseja fazer ?");
+                Console.WriteLine("|---------MENU---------|");
+                Console.WriteLine(" Adicionar novo número(1)");
+                Console.WriteLine(" Editar número(2)");
+                Console.WriteLine(" Excluir contato(3)");
+                Console.WriteLine(" Ver contatos(4)");
+                Console.WriteLine(" Sair(0)");
+                Console.WriteLine("-----------------------");
+                Console.Write("Digite o número correspondente a função desejada:");
                 escolha_menu = int.Parse(Console.ReadLine());
 
                 switch (escolha_menu)
@@ -49,9 +49,30 @@ namespace Trabalho2
                     //-- Novo contato -- //
                     case 1:
                         Contato c = new Contato();
+                        Console.WriteLine("Adicionando novo número");
                     adicionar:
-                        Console.Write("Nome: ");
+                        
+                        Console.Write("Nome: ");                       
                         string nome = Console.ReadLine();
+                        //Encerra a operação e volta ao menu inicial
+                        if (nome.Equals("0"))
+                        {
+                            Console.WriteLine("Deseja cancelar a operação (s/n):");
+                            if (Console.ReadLine().Equals("s"))
+                            {
+                                Console.Clear();
+                                continue;
+                            }
+                            else
+                            {
+                                goto adicionar;
+                            }
+
+                        }
+                        //Impede o usuário de criar um nome utilizando o separador e um nome vazio
+                        if (nome.Contains(separador) || nome.Equals(""))
+                            Console.WriteLine("Nome inválido!");
+                        //Verifica se o contato já existe
                         if (contato_existe(lista_contatos, nome) == 0)
                         {
                             c.nome = nome;
@@ -61,27 +82,67 @@ namespace Trabalho2
                             Console.WriteLine("Este contato já existe!");
                             goto adicionar;
                         }
+                        adcEm:
                         Console.Write("E-mail:");
-                        c.email = Console.ReadLine();
+                        string em = Console.ReadLine();
+                        //Encerra a operação e volta ao menu inicial
+                        if (em.Equals("0"))
+                        {
+                            Console.WriteLine("Deseja cancelar a operação (s/n):");
+                            if (Console.ReadLine().Equals("s"))
+                            {
+                                Console.Clear();
+                                continue;
+                            }
+                            else
+                                goto adcEm;
+                        }
+                            c.email = em;
+                        adcNmt:
                         Console.Write("Número de telefone: ");
-                        lista_numeros.Add(Console.ReadLine());
-                        int sair = 1;
-                        string add_nv = "";
-                        while (sair != 0)
+                        string num = Console.ReadLine();
+
+                        if (num.Equals("0"))
+                        {
+                            Console.WriteLine("Deseja cancelar a operação (s/n):");
+                            if (Console.ReadLine().Equals("s"))
+                            {
+                                Console.Clear();
+                                continue;
+                            }
+                            else
+                                goto adcNmt;
+                        }
+                        lista_numeros.Add(num);
+                        
+                        string add_nv = "s";
+                        adc_novamente:
+                        while (!add_nv.Equals("n"))
                         {
                             Console.Write("Deseja adicionar outro número ? (s/n)");
                             add_nv = Console.ReadLine();
 
+                            if (add_nv.Equals("0"))
+                            {
+                                Console.WriteLine("Deseja cancelar a operação (s/n):");
+                                if (Console.ReadLine().Equals("s"))
+                                {
+                                    Console.Clear();
+                                    continue;
+                                }
+                                else
+                                    goto adc_novamente;
+                            }
 
                             if (add_nv.Equals("s"))
                             {
+
                                 Console.Write("Novo número: ");
-                                lista_numeros.Add(Console.ReadLine());
+                                lista_numeros.Add(add_nv);
                             }
                             else if (add_nv.Equals("n"))
-                            {
-                                sair = 0;
-                            }
+                                break;
+                            
 
                             else
                             {
@@ -103,53 +164,111 @@ namespace Trabalho2
                     editar:
 
                         Contato editar_c;
-                        string nome_editar;
+                        string contato_ed;
                         int posicao = 0;
                         Console.Clear();
+                        menu_ed:
                         Console.Write("Nome do contato que deseja editar: ");
-                        nome_editar = Console.ReadLine();
+                        contato_ed = Console.ReadLine();
 
-                        if (nome_editar.Equals("menu"))
+                        if (contato_ed.Equals("0"))
                             goto menu;
 
-                        editar_c = lista_contatos.Find(item => item.nome.ToLower() == nome_editar.ToLower());
-                        posicao = lista_contatos.FindIndex(item => item.nome.ToLower() == nome_editar.ToLower());
+                        editar_c = lista_contatos.Find(item => item.nome.ToLower() == contato_ed.ToLower());
+                        posicao = lista_contatos.FindIndex(item => item.nome.ToLower() == contato_ed.ToLower());
 
                         if (editar_c != null)
                         {
-                            //Editar só o nome
+                            //Editar nome
+
+                            //Se o valor informado for ""(vazio) os dados não serão alterados
                             Console.WriteLine("Nome atual: " + editar_c.nome);
                             Console.Write("Novo nome: ");
-                            editar_c.nome = Console.ReadLine();
+                            string nm_ed = Console.ReadLine();
 
-                            //Editar só email
+                            if (nm_ed.Equals("0"))
+                            {
+                                Console.WriteLine("Deseja cancelar a operação (s/n):");
+                                if (Console.ReadLine().Equals("s"))
+                                {
+                                    Console.Clear();
+                                    continue;
+                                }
+                                else
+                                    goto menu_ed;
+                            }
+                            if (nm_ed != "")
+                                editar_c.nome = nm_ed;
+                            else
+                                Console.WriteLine("Valor inalterado!");
+                            //Editar email
                             Console.WriteLine("E-mail atual: " + editar_c.email);
                             Console.Write("Novo email: ");
-                            editar_c.email = Console.ReadLine();
+                            string em_ed = Console.ReadLine();
 
+                            if (em_ed.Equals("0"))
+                            {
+                                Console.WriteLine("Deseja cancelar a operação (s/n):");
+                                if (Console.ReadLine().Equals("s"))
+                                {
+                                    Console.Clear();
+                                    continue;
+                                }
+                                else
+                                    goto menu_ed;
+                            }
+                            if (em_ed != "")
+                                editar_c.nome = nm_ed;
+                            else
+                                Console.WriteLine("Valor inalterado!");
+                            editar_c.email = em_ed;
                             //Editar telefones
-                            int tem = 0;
+                            int tem = 0;//variavel temporaria
                             foreach (string telefone in editar_c.telefone)
                             {
                                 if (!telefone.Equals(separador) || !telefone.Equals("") || !telefone.Equals(" "))
                                 {
-                                    Console.WriteLine("[" + tem + "]" + telefone);
+                                    Console.WriteLine("[" + (tem+1) + "]" + telefone);
                                     tem++;
                                 }
                             }
                             int indice;
+                            string tel_indice;
                             Console.Write("Indice do telefone que deseja editar:");
-                            indice = int.Parse(Console.ReadLine());
-                            while (indice > tem)
+                            tel_indice = Console.ReadLine();
+                            indice = 1 - int.Parse(tel_indice);
+
+                            if (tel_indice != "0")
                             {
-                                Console.WriteLine("Numero invalido, digite novamente!");
-                                indice = int.Parse(Console.ReadLine());
+
+                                while (indice > tem)
+                                {
+                                    Console.WriteLine("Numero invalido, digite novamente!");
+                                    indice = int.Parse(Console.ReadLine());
+                                }
+
+                                Console.WriteLine("Telefone antigo: " + editar_c.telefone[indice]);
+                                Console.Write("Novo telefone:");
+                                string tel_ed = Console.ReadLine();
+
+                                if (tel_ed.Equals("0"))
+                                {
+                                    Console.WriteLine("Deseja cancelar a operação (s/n):");
+                                    if (Console.ReadLine().Equals("s"))
+                                    {
+                                        Console.Clear();
+                                        continue;
+                                    }
+                                    else
+                                        goto menu_ed;
+                                }
+                                if (tel_ed != "")
+                                    editar_c.telefone[indice] = nm_ed;
+                                else
+                                    Console.WriteLine("Valor inalterado!");
+
+                                editar_c.telefone[indice] = tel_ed;
                             }
-
-                            Console.WriteLine("Telefone antigo: " + editar_c.telefone[indice]);
-                            Console.Write("Novo telefone:");
-                            editar_c.telefone[indice] = Console.ReadLine();
-
                             lista_contatos[posicao] = editar_c;
                             Console.Clear();
                             Console.WriteLine("Editado com sucesso!");
@@ -167,9 +286,9 @@ namespace Trabalho2
                     case 3:
                     excluir:
                         Console.Write("Contato que deseja excluir:");
-                        string nome_cont = Console.ReadLine();
-                        Contato excluiu = lista_contatos.Find(item => item.nome.Equals(nome_cont));
-                        if (nome_cont.Equals("menu"))
+                        string contato_exl = Console.ReadLine();
+                        Contato excluiu = lista_contatos.Find(item => item.nome.Equals(contato_exl));
+                        if (contato_exl.Equals("0"))
                         {
                             goto menu;
                         }
@@ -188,7 +307,7 @@ namespace Trabalho2
                         break;
 
                     case 4:
-                        Console.WriteLine();
+                        Console.Clear();
                         Console.WriteLine("|---CONTATOS---|");
                         if(lista_contatos.Count() < 1)
                         {
@@ -283,4 +402,5 @@ namespace Trabalho2
 
     }
 
+ 
 }
