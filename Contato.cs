@@ -29,10 +29,13 @@ namespace Trabalho2
         public void excluir()
         {
             this.nome = null;
-            this.telefone = null;
+            foreach(string tel in this.telefone)
+            {
+                this.telefone = null;
+            }
             this.email = null;
             Console.Clear();
-            Console.WriteLine("Contato excluido com sucesso!");
+            Console.WriteLine("---CONTATO EXLUIDO COM SUCESSO!---\n");
         }
     }
 
